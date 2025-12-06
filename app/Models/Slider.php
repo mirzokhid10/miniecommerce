@@ -9,6 +9,13 @@ class Slider extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'banner',
+        'btn_url',
+        'serial',
+        'status',
+    ];
+
     public function translations()
     {
         return $this->hasMany(SliderTranslation::class);
