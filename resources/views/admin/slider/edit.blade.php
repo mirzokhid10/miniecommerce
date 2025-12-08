@@ -119,8 +119,8 @@
 
 
                                     {{-- ===========================
-                                    Russian
-                                ============================ --}}
+                                        Russian
+                                    ============================ --}}
                                     <div class="tab-pane fade" id="ru" role="tabpanel">
                                         <div class="row">
                                             <div class="col-12 col-sm-6 col-md-4">
@@ -151,8 +151,8 @@
 
 
                                     {{-- ===========================
-                                    English
-                                ============================ --}}
+                                        English
+                                    ============================ --}}
                                     <div class="tab-pane fade" id="en" role="tabpanel">
                                         <div class="row">
                                             <div class="col-12 col-sm-6 col-md-4">
@@ -184,8 +184,8 @@
                                 </div>
 
                                 {{-- ===========================
-                                Submit Button
-                            ============================ --}}
+                                    Submit Button
+                                ============================ --}}
                                 <button type="submit" class="btn btn-primary mt-3">
                                     Update Slider
                                 </button>
