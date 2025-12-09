@@ -38,31 +38,31 @@ class ProductVariantController extends Controller
         ]);
     }
 
-    public function edit(ProductVariant $products_variant)
+    public function edit(ProductVariant $variant)
     {
         return view('admin.products.products-variant.edit', [
-            'product_variant' => $products_variant
+            'variant' => $variant
         ]);
     }
 
-    public function update(UpdateProductVariantRequest $request, ProductVariant $products_variant, ProductVariantService $service)
+    public function update(UpdateProductVariantRequest $request, ProductVariant $variant, ProductVariantService $service)
     {
-        $service->update($products_variant, $request->validated());
+        $service->update($variant, $request->validated());
 
         notify()->success('Product Variant updated successfully!');
 
         return redirect()->route('admin.products-variant.index', [
-            'product' => $products_variant->product_id
+            'product' => $variant->product_id
         ]);
     }
 
 
 
-    public function destroy(ProductVariant $product_variant)
+    public function destroy(ProductVariant $variant)
     {
-        $product_id = $product_variant->product_id;
+        $product_id = $variant->product_id;
 
-        $product_variant->delete();
+        $variant->delete();
         notify()->success('Product Variant deleted successfully!');
         return redirect()
             ->route('admin.products-variant.index', $product_id)

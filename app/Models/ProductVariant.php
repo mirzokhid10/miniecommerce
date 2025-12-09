@@ -22,7 +22,8 @@ class ProductVariant extends Model
     public function translate($locale = null)
     {
         $locale = $locale ?? app()->getLocale();
-        return $this->translations->where('locale', $locale)->first();
+
+        return $this->translations->firstWhere('locale', $locale);
     }
 
     public function getNameAttribute()

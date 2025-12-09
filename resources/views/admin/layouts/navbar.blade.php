@@ -226,11 +226,13 @@
                  <div class="dropdown-divider"></div>
                  <form method="POST" action="{{ route('logout') }}" class="dropdown-item has-icon text-danger">
                      @csrf
-                     <x-dropdown-link :href="route('logout')"
-                         onclick="event.preventDefault();
-                                                    this.closest('form').submit();">
+                     <a href="{{ route('logout') }}"
+                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                         class="dropdown-item">
                          {{ __('Log Out') }}
-                     </x-dropdown-link>
+                     </a>
+
+
                  </form>
 
              </div>

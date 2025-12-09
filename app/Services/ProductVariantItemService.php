@@ -25,8 +25,6 @@ class ProductVariantItemService
     {
 
         $item->update([
-            'product_id'         => $data['product_id'],
-            'product_variant_id' => $data['product_variant_id'],
             'price'              => $data['price'],
             'is_default'         => $data['is_default'],
             'status'             => $data['status'],

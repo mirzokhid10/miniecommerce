@@ -14,43 +14,42 @@ class ProductVariantService
     public function create(array $data): ProductVariant
     {
 
-        $product_variant = ProductVariant::create([
+        $variant = ProductVariant::create([
             'product_id' => $data['product_id'],
             'status' => $data['status'],
         ]);
 
-        $this->syncTranslations($product_variant, $data);
+        $this->syncTranslations($variant, $data);
 
-        return $product_variant->fresh('translations');
+        return $variant->fresh('translations');
     }
 
     /**
      * Update product variant + translations
      */
-    public function update(ProductVariant $product_variant, array $data): ProductVariant
+    public function update(ProductVariant $variant, array $data): ProductVariant
     {
-        $product_variant->update([
-            'product_id' => $data['product_id'],
+        $variant->update([
             'status' => $data['status'],
         ]);
-        $this->syncTranslations($product_variant, $data);
+        $this->syncTranslations($variant, $data);
 
-        return $product_variant->fresh('translations');
+        return $variant->fresh('translations');
     }
 
     /**
      * Delete product variant + translations
      */
-    public function delete(ProductVariant $product_variant): void
+    public function delete(ProductVariant $variant): void
     {
-        $product_variant->translations()->delete();
-        $product_variant->delete();
+        $variant->translations()->delete();
+        $variant->delete();
     }
 
     /**
      * Sync translations for product variant
      */
-    private function syncTranslations(ProductVariant $product_variant, array $data): void
+    private function syncTranslations(ProductVariant $variant, array $data): void
     {
         if (!isset($data['name']) || !is_array($data['name'])) {
             return;
@@ -61,7 +60,7 @@ class ProductVariantService
                 continue;
             }
 
-            $product_variant->translations()->updateOrCreate(
+            $variant->translations()->updateOrCreate(
                 [
                     'locale' => $locale,
                 ],

@@ -1,12 +1,18 @@
 <?php
 
+use App\Controllers\Frontend\ReviewController;
 use App\Http\Controllers\Backend\AdminController;
+use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\Frontend\FrontendProductController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\UserAddressController;
 use App\Http\Controllers\Frontend\UserDashboardController;
+use App\Http\Controllers\Frontend\UserMessageController;
 use App\Http\Controllers\Frontend\UserProfileController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -61,7 +67,34 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
+
+///////////////////////////////////////////
+////    FrontEnd Product Controller Route
+///////////////////////////////////////////
+
+Route::get('products', [FrontendProductController::class, 'productsIndex'])->name('products.index');
+Route::get('product-detail/{slug}', [FrontendProductController::class, 'showProduct'])->name('product-detail');
+Route::get('change-product-list-view', [FrontendProductController::class, 'chageListView'])->name('change-product-list-view');
+Route::get('show-product-modal/{id}', [HomeController::class, 'ShowProductModal'])->name('show-product-modal');
+
 Route::get('admin/login', [AdminController::class, 'login'])->name('admin.login');
+
+
+///////////////////////////////////////////
+////    Add To Cart Routes
+///////////////////////////////////////////
+
+Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('add-to-cart');
+Route::get('cart-details', [CartController::class, 'cartDetails'])->name('cart-details');
+Route::post('cart/update-quantity', [CartController::class, 'updateProductQty'])->name('cart.update-quantity');
+Route::get('clear-cart', [CartController::class, 'clearCart'])->name('clear.cart');
+Route::get('cart/remove-product/{rowId}', [CartController::class, 'removeProduct'])->name('cart.remove-product');
+Route::get('cart-count', [CartController::class, 'getCartCount'])->name('cart-count');
+Route::get('cart-products', [CartController::class, 'getCartProducts'])->name('cart-products');
+Route::post('cart/remove-sidebar-product', [CartController::class, 'removeSidebarProduct'])->name('cart.remove-sidebar-product');
+Route::get('cart/sidebar-product-total', [CartController::class, 'cartTotal'])->name('cart.sidebar-product-total');
+
+
 
 
 Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 'user.'], function () {
@@ -69,4 +102,26 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     Route::get('profile', [UserProfileController::class, 'index'])->name('profile'); // user.profile
     Route::put('profile', [UserProfileController::class, 'updateProfile'])->name('profile.update'); // user.profile.update
     Route::post('profile', [UserProfileController::class, 'updatePassword'])->name('profile.update.password'); // user.profile.password
+
+    ///////////////////////////////////////////
+    ////    User Message Controller Route
+    ///////////////////////////////////////////
+
+    Route::get('messages', [UserMessageController::class, 'index'])->name('messages.index');
+    Route::post('send-message', [UserMessageController::class, 'sendMessage'])->name('send-message');
+    Route::get('get-messages', [UserMessageController::class, 'getMessages'])->name('get-messages');
+    Route::post('mark-message-seen', [UserMessageController::class, 'markMessageSeen'])->name('mark-message-seen');
+
+    ///////////////////////////////////////////
+    ////    Review Controller Routes
+    ///////////////////////////////////////////
+
+    Route::get('review', [ReviewController::class, 'index'])->name('reviews.index');
+    Route::post('review', [ReviewController::class, 'create'])->name('reviews.create');
+
+    ///////////////////////////////////////////
+    ////    User Address Controller Route
+    ///////////////////////////////////////////
+
+    Route::resource('address', UserAddressController::class);
 });

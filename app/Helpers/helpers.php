@@ -21,55 +21,55 @@ function setActive(array $route)
 
 // /** Check if product have discount */
 
-// function checkDiscount($product)
-// {
-//     $currentDate = date('Y-m-d');
+function checkDiscount($product)
+{
+    $currentDate = date('Y-m-d');
 
-//     if (
-//         $product->offer_price > 0 && $currentDate
-//         >= $product->offer_start_date && $currentDate
-//         <= $product->offer_end_date
-//     ) {
-//         return true;
-//     }
+    if (
+        $product->offer_price > 0 && $currentDate
+        >= $product->offer_start_date && $currentDate
+        <= $product->offer_end_date
+    ) {
+        return true;
+    }
 
-//     return false;
-// }
+    return false;
+}
 
 // /** Calculate discount percent */
 
-// function calculateDiscountPercent($originalPrice, $discountPrice)
-// {
-//     $discountAmount = $originalPrice - $discountPrice;
-//     $discountPercent = ($discountAmount / $originalPrice) * 100;
+function calculateDiscountPercent($originalPrice, $discountPrice)
+{
+    $discountAmount = $originalPrice - $discountPrice;
+    $discountPercent = ($discountAmount / $originalPrice) * 100;
 
-//     return round($discountPercent);
-// }
+    return round($discountPercent);
+}
 
-// /** Check the product type */
+/** Check the product type */
 
-// function productType($type)
-// {
-//     switch ($type) {
-//         case 'new_arrival':
-//             return 'New';
-//             break;
-//         case 'featured_product':
-//             return 'Featured';
-//             break;
-//         case 'top_product':
-//             return 'Top';
-//             break;
+function productType($type)
+{
+    switch ($type) {
+        case 'new_arrival':
+            return 'New';
+            break;
+        case 'featured_product':
+            return 'Featured';
+            break;
+        case 'top_product':
+            return 'Top';
+            break;
 
-//         case 'best_product':
-//             return 'Best';
-//             break;
+        case 'best_product':
+            return 'Best';
+            break;
 
-//         default:
-//             return '';
-//             break;
-//     }
-// }
+        default:
+            return '';
+            break;
+    }
+}
 
 // function getCartTotal()
 // {
@@ -135,7 +135,7 @@ function setActive(array $route)
 
 // /** lemit text */
 
-// function limitText($text, $limit = 20)
-// {
-//     return \Str::limit($text, $limit);
-// }
+function limitText($text, $limit = 20)
+{
+    return \Str::limit($text, $limit);
+}

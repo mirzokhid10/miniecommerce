@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\ProductImageGalleryController;
 use App\Http\Controllers\Backend\ProductVariantController;
 use App\Http\Controllers\Backend\ProductVariantItemController;
+use App\Models\Backend\AdminReviewController;
 
 Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
@@ -73,17 +74,17 @@ Route::post(
 )->name('products-variant.store');
 
 Route::get(
-    'products/variants/{product_variant}/edit',
+    'products/variants/{variant}/edit',
     [ProductVariantController::class, 'edit']
 )->name('products-variant.edit');
 
 Route::put(
-    'products/variants/{product_variant}',
+    'products/variants/{variant}',
     [ProductVariantController::class, 'update']
 )->name('products-variant.update');
 
 Route::delete(
-    'products/variants/{product_variant}',
+    'products/variants/{variant}',
     [ProductVariantController::class, 'destroy']
 )->name('products-variant.destroy');
 
@@ -121,3 +122,12 @@ Route::delete(
     [ProductVariantItemController::class, 'destroy']
 )->name('products-variant-item.destroy');
 Route::put('products-variant-item-status', [ProductVariantItemController::class, 'changeStatus'])->name('products-variant-item.change-status');
+
+
+///////////////////////////////////////////
+////    Admin Review Controller Route
+///////////////////////////////////////////
+
+
+Route::get('reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
+Route::put('reviews/change-status', [AdminReviewController::class, 'changeStatus'])->name('reviews.change-status');

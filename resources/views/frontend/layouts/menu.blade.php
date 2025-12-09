@@ -61,7 +61,7 @@ use App\Enums\UserRole;
                     </ul>
 
                     <ul class="wsus__menu_item">
-                        <li><a class="active" href="index.html">home</a></li>
+                        <li><a class="active" href="{{ route('home') }}">home</a></li>
 
                         <li><a href="blog.html">blog</a></li>
                         <li><a href="track_order.html">track order</a></li>

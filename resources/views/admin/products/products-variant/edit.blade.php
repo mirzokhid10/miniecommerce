@@ -14,16 +14,16 @@
                             <h4>Update Variant</h4>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('admin.products-variant.update', $product_variant->id) }}" method="POST">
+                            <form action="{{ route('admin.products-variant.update', $variant->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
-                                <input type="hidden" name="product_id" value="{{ $product_variant->product_id }}">
+                                <input type="hidden" name="product_id" value="{{ $variant->product_id }}">
                                 <div class="form-group">
                                     <label for="inputState">Status</label>
                                     <select id="inputState" class="form-control" name="status">
-                                        <option {{ $product_variant->status == 1 ? 'selected' : '' }} value="1">Active
+                                        <option {{ $variant->status == 1 ? 'selected' : '' }} value="1">Active
                                         </option>
-                                        <option {{ $product_variant->status == 0 ? 'selected' : '' }} value="0">
+                                        <option {{ $variant->status == 0 ? 'selected' : '' }} value="0">
                                             Inactive
                                         </option>
                                     </select>
@@ -63,7 +63,7 @@
                                                 <div class="form-group">
                                                     <label>Name (UZ)</label>
                                                     <input type="text" class="form-control" name="name[uz]"
-                                                        value="{{ old('name.uz', $product_variant->translate('uz')->name ?? '') }}">
+                                                        value="{{ old('name.uz', $variant->translate('uz')->name ?? '') }}">
                                                 </div>
                                             </div>
 
@@ -80,7 +80,7 @@
                                                 <div class="form-group">
                                                     <label>Name (Ru)</label>
                                                     <input type="text" class="form-control" name="name[ru]"
-                                                        value="{{ old('name.ru', $product_variant->translate('ru')->name ?? '') }}">
+                                                        value="{{ old('name.ru', $variant->translate('ru')->name ?? '') }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -96,7 +96,7 @@
                                                 <div class="form-group">
                                                     <label>Name (En)</label>
                                                     <input type="text" class="form-control" name="name[en]"
-                                                        value="{{ old('name.en', $product_variant->translate('en')->name ?? '') }}">
+                                                        value="{{ old('name.en', $variant->translate('en')->name ?? '') }}">
                                                 </div>
                                             </div>
                                         </div>

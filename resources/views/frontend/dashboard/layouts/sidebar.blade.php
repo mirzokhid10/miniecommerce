@@ -30,15 +30,20 @@
         <li><a class="{{ setActive(['user.messages.*']) }}" href="{{ route('user.messages.index') }}"><i
                     class="fas fa-envelope"></i>Messages</a>
         </li> --}}
+        <li><a class="{{ setActive(['user.profile.*']) }}" href="{{ route('user.profile') }}"><i
+                    class="fas fa-user"></i>My Profile</a></li>
+        <li><a class="{{ setActive(['user.address.*']) }}" href="{{ route('user.address.index') }}"><i
+                    class="fas fa-map-marker-alt"></i>Address</a></li>
         <li>
-            <form method="POST" action="{{ route('logout') }}" class="">
+            <form method="POST" action="{{ route('logout') }}" class="dropdown-item has-icon text-danger">
                 @csrf
-                <x-dropdown-link :href="route('logout')"
-                    onclick="event.preventDefault();
-                this.closest('form').submit();">
-                    <i class="far fa-sign-out-alt"></i>
+                <a href="{{ route('logout') }}"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                    class="dropdown-item">
                     {{ __('Log Out') }}
-                </x-dropdown-link>
+                </a>
+
+
             </form>
         </li>
     </ul>
