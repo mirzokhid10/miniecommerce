@@ -14,7 +14,8 @@
                             <h4>Create Variant</h4>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('admin.products-variant.store') }}" method="POST">
+                            <form action="{{ route('admin.products-variant.store', ['product' => request()->product]) }}"
+                                method="POST">
                                 @csrf
                                 <div class="form-group">
                                     <input type="hidden" class="form-control" name="product_id"

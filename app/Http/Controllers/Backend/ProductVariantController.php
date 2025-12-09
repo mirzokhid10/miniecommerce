@@ -56,14 +56,16 @@ class ProductVariantController extends Controller
         ]);
     }
 
-    public function destroy(ProductVariant $products_variant, ProductVariantService $service)
+
+
+    public function destroy(ProductVariant $product_variant)
     {
-        $service->delete($products_variant);
+        $product_id = $product_variant->product_id;
 
+        $product_variant->delete();
         notify()->success('Product Variant deleted successfully!');
-
-        return redirect()->route('admin.products-variant.index', [
-            'product' => $products_variant->product_id
-        ]);
+        return redirect()
+            ->route('admin.products-variant.index', $product_id)
+            ->with('success', 'Variant deleted successfully');
     }
 }
