@@ -19,17 +19,21 @@ class ProductVariantItemController extends Controller
     /**
      * Show all variant items of a product + variant
      */
+
     public function index(
         ProductVariantItemDataTable $dataTable,
         Product $product,
         ProductVariant $variant
     ) {
-
-        return $dataTable->render(
+        return $dataTable->with([
+            'product_id' => $product->id,
+            'variant_id'  => $variant->id
+        ])->render(
             'admin.products.products-variant-item.index',
             compact('product', 'variant')
         );
     }
+
 
     /**
      * Show create form

@@ -8,98 +8,85 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\Html\Editor\Editor;
+use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
 class ProductVariantItemDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
+     *
+     * @param QueryBuilder<ProductVariantItem> $query Results from query() method.
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->addColumn('action', function ($query) {
 
-            // ✅ Name column (translations)
-            ->addColumn('name', function ($item) {
-                $locale = app()->getLocale();
-                $translation = $item->translations->firstWhere('locale', $locale);
-
-                return $translation->name ?? '-';
-            })
-
-            // ✅ Variant name column
-            ->addColumn('variant_name', function ($item) {
-                return $item->variant->name ?? '-';
-            })
-
-            // ✅ Is Default column
-            ->addColumn('is_default', function ($item) {
-                return $item->is_default
-                    ? '<span class="badge badge-success">default</span>'
-                    : '<span class="badge badge-danger">no</span>';
-            })
-
-            // ✅ Status toggle column
-            ->addColumn('status', function ($item) {
-                $checked = $item->status ? 'checked' : '';
-
-                return '
-                    <label class="custom-switch mt-2">
-                        <input type="checkbox" ' . $checked . '
-                               class="custom-switch-input change-status"
-                               data-id="' . $item->id . '">
-                        <span class="custom-switch-indicator"></span>
-                    </label>
-                ';
-            })
-
-            // ✅ Action buttons (Edit + Delete)
-            ->addColumn('action', function ($item) {
-
-                $editUrl = route('admin.products-variant-item.edit', [
-                    'product' => $item->productVariant->product_id,
-                    'variant' => $item->product_variant_id,
-                    'item'    => $item->id,
-                ]);
-
-                $deleteUrl = route('admin.products-variant-item.destroy', [
-                    'product' => $item->productVariant->product_id,
-                    'variant' => $item->product_variant_id,
-                    'item'    => $item->id,
-                ]);
-
-                return "
-                    <a href='{$editUrl}' class='btn btn-primary'>
-                        <i class='far fa-edit'></i>
-                    </a>
-
-                    <form method='POST' action='{$deleteUrl}' style='display:inline-block;'
-                          onsubmit='return confirm(\"Are you sure?\")'>
+                $editBtn = "<a href='" . route('admin.products-variant-item.edit', [
+                    'product' => $this->product_id,
+                    'variant' => $this->variant_id,
+                    'item'    => $query->id,
+                ]) . "' class='btn btn-primary'><i class='far fa-edit'></i></a>";
+                $deleteBtn = "
+                    <form method='POST' action='" . route('admin.products-variant-item.destroy', [
+                    'product' => $this->product_id,
+                    'variant' => $this->variant_id,
+                    'item'    => $query->id,
+                ]) . "' style='display:inline-block;' onsubmit='return confirm(\"Are you sure?\")'>
                         " . csrf_field() . method_field('DELETE') . "
-                        <button type='submit' class='btn btn-danger ml-2'>
+                        <button type='submit' class='btn btn-danger ml-2' style='background:#fc544b;'>
                             <i class='far fa-trash-alt'></i>
                         </button>
-                    </form>
-                ";
+                    </form>";
+
+                return $editBtn . $deleteBtn;
+            })
+            ->addColumn('name', function ($product) {
+                return $product->translate(app()->getLocale())->name ?? '-';;
+            })
+            ->addColumn('status', function ($query) {
+                if ($query->status == 1) {
+                    $button = '<label class="custom-switch mt-2">
+                        <input type="checkbox" checked name="custom-switch-checkbox" data-id="' . $query->id . '" class="custom-switch-input change-status" >
+                        <span class="custom-switch-indicator"></span>
+                    </label>';
+                } else {
+                    $button = '<label class="custom-switch mt-2">
+                        <input type="checkbox" name="custom-switch-checkbox" data-id="' . $query->id . '" class="custom-switch-input change-status">
+                        <span class="custom-switch-indicator"></span>
+                    </label>';
+                }
+                return $button;
             })
 
-            // ✅ Allow HTML rendering
-            ->rawColumns(['name', 'status', 'action', 'is_default'])
+            ->addColumn('is_default', function ($query) {
+                if ($query->is_default == 1) {
+                    return '<i class="badge badge-success">defalut</i>';
+                } else {
+                    return '<i class="badge badge-danger">no</i>';
+                }
+            })
+            ->addColumn('variant_name', function ($query) {
+                return $query->variant->name;
+            })
+            ->rawColumns(['status', 'action', 'is_default'])
             ->setRowId('id');
     }
 
     /**
-     * Build query with eager loading.
+     * Get the query source of dataTable.
+     *
+     * @return QueryBuilder<ProductVariantItem>
      */
     public function query(ProductVariantItem $model): QueryBuilder
     {
-        $variant_id = request()->input('variant');
-
-        return $model->where('product_variant_id', $variant_id);
+        return $model->newQuery();
     }
 
     /**
-     * HTML builder for the table.
+     * Optional method if you want to use the html builder.
      */
     public function html(): HtmlBuilder
     {
@@ -115,17 +102,17 @@ class ProductVariantItemDataTable extends DataTable
                 Button::make('pdf'),
                 Button::make('print'),
                 Button::make('reset'),
-                Button::make('reload'),
+                Button::make('reload')
             ]);
     }
 
     /**
-     * Define columns.
+     * Get the dataTable columns definition.
      */
     public function getColumns(): array
     {
         return [
-            Column::make('id')->width(60),
+            Column::make('id')->width(100),
             Column::make('name'),
             Column::make('variant_name'),
             Column::make('price'),
@@ -134,13 +121,13 @@ class ProductVariantItemDataTable extends DataTable
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
-                ->width(180)
+                ->width(200)
                 ->addClass('text-center'),
         ];
     }
 
     /**
-     * Filename for export.
+     * Get the filename for export.
      */
     protected function filename(): string
     {

@@ -17,12 +17,6 @@ class ProductVariantItem extends Model
         'status',
     ];
 
-
-    public function productVariant()
-    {
-        return $this->belongsTo(ProductVariant::class);
-    }
-
     public function variant()
     {
         return $this->belongsTo(ProductVariant::class, 'product_variant_id');

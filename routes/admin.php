@@ -120,3 +120,4 @@ Route::delete(
     'products/{product}/variants/{variant}/items/{item}',
     [ProductVariantItemController::class, 'destroy']
 )->name('products-variant-item.destroy');
+Route::put('products-variant-item-status', [ProductVariantItemController::class, 'changeStatus'])->name('products-variant-item.change-status');

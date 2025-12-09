@@ -18,8 +18,10 @@
                         <div class="card-header">
                             <h4>Variant: {{ $variant->name }} </h4>
                             <div class="card-header-action">
-                                <a href="{{ route('admin.products-variant-item.index', ['product' => $product->id, 'variant' => $variant->id]) }}"
-                                    class="btn btn-primary"><i class="fas fa-plus"></i> Create New</a>
+                                <a href="{{ route('admin.products-variant-item.create', ['product' => $product->id, 'variant' => $variant->id]) }}"
+                                    class="btn btn-primary">
+                                    <i class="fas fa-plus"></i> Create New
+                                </a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -34,59 +36,47 @@
     </section>
 @endsection
 
-<script>
-    document.addEventListener('click', function(e) {
-        if (!e.target.classList.contains('change-status')) return;
 
-        let isChecked = e.target.checked;
-        let id = e.target.dataset.id;
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 
-        $.ajax([
-            'url' => route('admin.products-variant-item.index', [
-                'product' => $this - > product - > id,
-                'variant' => $this - > variant - > id,
-            ])
-        ])
-        method: 'PUT',
-            data: {
-                status: isChecked,
-                id: id
-            },
-            success: function(data) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: data.message,
-                });
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-    });
-</script>
-{{--
-<script>
-    document.addEventListener('click', function(e) {
-        if (!e.target.classList.contains('change-status')) return;
+        });
+        $(document).ready(function() {
+            $('body').on('click', '.change-status', function() {
+                let isChecked = $(this).is(':checked');
+                let id = $(this).data('id');
 
-        let isChecked = e.target.checked;
-        let id = e.target.dataset.id;
+                $.ajax({
+                    url: "{{ route('admin.products-variant-item.change-status') }}",
+                    method: 'PUT',
+                    data: {
+                        status: isChecked,
+                        id: id
+                    },
+                    success: function(data) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: data.message || 'Status changed successfully.',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                confirmButton: 'swal-custom-confirm'
+                            },
+                            buttonsStyling: false // this disables the default SweetAlert styles
 
-        fetch("{{ route('admin.products-variant-item.change-status', ['product' => $product->id, 'variant' => $variant->id]) }}", {
-                method: "PUT",
-                headers: {
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    id: id,
-                    status: isChecked,
-                }),
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                })
+
             })
-            .then(res => res.json())
-            .then(data => {
-                Swal.fire({
-                    icon: "success",
-                    title: "Updated!",
-                    text: data.message,
-                });
-            });
-    });
-</script> --}}
+        })
+    </script>
+@endpush
